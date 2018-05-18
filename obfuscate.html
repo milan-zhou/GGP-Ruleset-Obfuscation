@@ -1,6 +1,69 @@
 <html>
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="epilog.js"></script>
-    <script src="api.js"></script>
     <script src="obfuscate.js"></script>
+    <style>
+        html, body, textarea {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            height: 100%;
+        }
+
+        textarea {
+            height: 50vh;
+            width: 49%;
+            margin: 0
+        }
+        .inline-div {
+            display:inline-block;
+            width: 100%
+        }
+        .inline-txtarea {
+            resize: none;
+        }
+        .button {
+            -webkit-appearance: button; /* 2 */
+            cursor: pointer; /* 3 */
+        }
+    </style>
+    <head>
+        <body>
+            <div class="inline-div">
+                <textarea id="input" class="inline-textarea"></textarea>
+                <textarea id="output" class="inline-textarea"></textarea>
+            </div>
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="flags" value="expand"> Expand propositions
+                        </td>
+                        <td>
+                            <input type="number" name="probability" value=1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                                <input type="checkbox" name="flags" value="duplicate"> Duplicate rules
+                            </td>
+                            <td>
+                                <input type="number" name="probability" value=1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                                <input type="checkbox" name="flags" value="reverse"> Reverse entity names
+                            </td>
+                            <td>
+                                <input type="number" name="probability" value=1>
+                        </td>
+                    </tr>
+                </table>
+                <a href="#" id="obfuscate" class="button">obfuscate</a>
+            </div>
+        </body>
+    </head>
 </html>

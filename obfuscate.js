@@ -1,55 +1,18 @@
-function obfuscate() {
-    let rules = 
-    `role(white)
-    role(black)
-  
-    base(p)
-    base(q)
-    base(r)
-    base(s)
-  
-    action(a)
-    action(b)
-    action(c)
-    action(d)
-  
-    init(s)
-  
-    legal(white,a)
-    legal(white,b)
-    legal(white,c)
-    legal(black,d)
-    
-    next(p) :- does(white,a) & ~true(p)
-    next(p) :- ~does(white,a) & true(p)
-    next(q) :- does(white,b) & true(p)
-    next(q) :- does(white,c) & true(r)
-    next(q) :- ~does(white,b) & ~does(white,c) & true(q)
-    next(r) :- does(white,c) & true(q)
-    next(r) :- ~does(white,c) & true(r)
-
-    goal(white,100) :- terminal
-    goal(white,0) :- ~terminal
-    goal(black,100) :- terminal
-    goal(black,0) :- ~terminal
-
-    terminal :- true(p) & true(q) & true(r)
-    `
+function obfuscate(rules, m) {
     let data = readdata(rules)
     let viz = new Set(["role", "base", "input", "init", "true", "does", "next", "legal", "goal", "terminal"])
     let constant = new Set(["rule", "not"])
-    console.log(data)
-    // recReverse(data, viz, constant)
-    // duplicateProposition(data, viz, constant, .5)
-    expandProposition(data, viz, constant, .5)
-    // let request = new XMLHttpRequest()
-    // request.open("GET","https://cors.io/?http://randomword.setgetgo.com/get.php")
-    // request.responseType = "jsonp"
-    // request.onload = function() {
-    //     console.log(request.responseText)
-    // };
-    // request.send();
-    console.log(grindem(data).split("\r").join("\n"))
+    let tools = {
+        "reverse": recReverse,
+        "expand" : expandProposition,
+        "duplicate": duplicateProposition,
+    }
+    Object.keys(m).forEach( (k, i) => {
+        if (m[k]["checked"]) {
+            tools[k](data, viz, constant, 1 - m[k]["p"])
+        }
+    })
+    return grindem(data).split("\r").join("\n")
 }
 
 function expandProposition(arr, viz, constant, p) {
@@ -92,3 +55,29 @@ function recReverse(arr, viz, constant) {
 function reverseString(str) {
     return str.split("").reverse().join("");
 }
+
+window.addEventListener("load", event => {
+    let button = document.getElementById("obfuscate")
+    button.addEventListener("click", event => {
+        let input = document.getElementById("input")
+        let flags = document.getElementsByName("flags")
+        let probs = document.getElementsByName("probability")
+        for (let i = 0; i < probs.length; i++) {
+            if (probs[i].value < 0 || probs[i].value > 1) {
+                return alert("Probabilities must be between 0 and 1")
+            }
+        }
+        let m = new Object()
+        for (let i = 0; i < flags.length; i++) {
+            flag = flags[i]
+            m[flag.value] = {
+                "checked": flag.checked,
+                "p": probs[i].value
+            }
+
+        }
+        console.log(m)
+        let output = obfuscate(input.value, m)
+        document.getElementById("output").value = output
+    })
+})
