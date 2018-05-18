@@ -3,7 +3,7 @@ function obfuscate(rules, m) {
     let viz = new Set(["role", "base", "input", "init", "true", "does", "next", "legal", "goal", "terminal"])
     let constant = new Set(["rule", "not"])
     let tools = {
-        "reverse": recReverse,
+        "reverse": reverse,
         "expand" : expandProposition,
         "duplicate": duplicateProposition,
     }
@@ -20,7 +20,6 @@ function expandProposition(arr, viz, constant, p) {
         if (arr[i][0] === "rule") {
             if (Math.random() > p ) {
                 arr[i].push(arr[i][arr[i].length-1])
-                console.log(arr[i])
             }
         }
     }
@@ -39,15 +38,28 @@ function duplicateProposition(arr, viz, constant, p) {
     }
 }
 
-function recReverse(arr, viz, constant) {
+function reverse(arr, viz, constant, p) {
+    let seen = new Set()
+    let ignore = new Set()
+    recReverse(arr, viz, constant, p, seen, ignore)    
+}
+function recReverse(arr, viz, constant, p, seen, ignore) {
     for (let i = 0; i < arr.length; i++) {
         if (typeof arr[i] === "object") {
-            recReverse(arr[i], viz, constant)
+            recReverse(arr[i], viz, constant, p, seen, ignore)
         } else {
-            if (viz.has(arr[i]) || constant.has(arr[i])) {
+            if (viz.has(arr[i]) || constant.has(arr[i]) || ignore.has(arr[i])) {
                 continue
             }
-            arr[i] = reverseString(arr[i])
+            console.log(p)
+            if (seen.has(arr[i])) {
+                arr[i] = reverseString(arr[i])
+            } else if (Math.random() > p) {
+                seen.add(arr[i])
+                arr[i] = reverseString(arr[i])
+            } else {
+                ignore.add(arr[i])
+            }
         }
     }
 }
@@ -72,7 +84,7 @@ window.addEventListener("load", event => {
             flag = flags[i]
             m[flag.value] = {
                 "checked": flag.checked,
-                "p": probs[i].value
+                "p": parseFloat(probs[i].value)
             }
 
         }
