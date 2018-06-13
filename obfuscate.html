@@ -1,7 +1,8 @@
 <html>
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="epilog.js"></script>
+    <script type="text/javascript" src="http://epilog.stanford.edu/javascript/epilog.js"></script>
     <script src="obfuscate.js"></script>
+    <script type="text/javascript" src="words_dictionary.json"></script>
     <style>
         html, body, textarea {
             box-sizing: border-box;
@@ -39,6 +40,22 @@
                 <table>
                     <tr>
                         <td>
+                            <input type="checkbox" name="flags" value="replace"> Replace entity names
+                        </td>
+                        <td>
+                            <input type="number" name="probability" value=1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="flags" value="reverse"> Reverse entity names
+                        </td>
+                        <td>
+                            <input type="number" name="probability" value=1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             <input type="checkbox" name="flags" value="expand"> Expand propositions
                         </td>
                         <td>
@@ -48,14 +65,6 @@
                     <tr>
                         <td>
                                 <input type="checkbox" name="flags" value="duplicate"> Duplicate rules
-                            </td>
-                            <td>
-                                <input type="number" name="probability" value=1>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                                <input type="checkbox" name="flags" value="reverse"> Reverse entity names
                             </td>
                             <td>
                                 <input type="number" name="probability" value=1>
